@@ -2,6 +2,20 @@
 
 **StudentDB** is a simple academic database application designed to manage student records. It allows users to perform basic operations like adding, viewing, updating, searching, sorting, and deleting student records. The application also validates the PESEL number, checks the checksum, verifies the birthdate, and ensures the gender matches the PESEL data.
 
+## Project Structure
+```
+student_database/
+│── main.py               
+│── student.py            
+│── database.py         
+│── pesel_validator.py    
+│── file_manager.py      
+│── utils.py     
+|── gui.py      
+│── tests/              
+│── requirements.txt     
+```
+
 ## Features
 - Add new students to the database
 - View all students
