@@ -2,8 +2,6 @@ from student import Student
 from pesel_validator import validate_pesel
 from utils import load_data, save_data
 
-
-    
 class Database:
     def __init__(self, data_file='students.json'):
         self.data_file = data_file
@@ -40,3 +38,6 @@ class Database:
                 save_data(self.students, self.data_file)
                 return
         raise ValueError("Student not found")
+
+    def validate_pesel(self, pesel):
+        return validate_pesel(pesel)

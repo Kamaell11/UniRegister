@@ -2,25 +2,30 @@ import re
 from datetime import datetime
 
 def validate_pesel(pesel):
-    if len(pesel) != 11 or not pesel.isdigit():
+    if not re.match(r"^\d{11}$", pesel):
         return False
-    
-    # Suma kontrolna PESEL
-    weights = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3]
-    check_sum = sum(int(pesel[i]) * weights[i] for i in range(10))
-    check_digit = (10 - (check_sum % 10)) % 10
-    if check_digit != int(pesel[10]):
+
+    # PESEL checksum
+    weights = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3, 1]
+    checksum = sum(int(pesel[i]) * weights[i] for i in range(10)) % 10
+    checksum = 10 - checksum if checksum != 0 else 0
+    if int(pesel[10]) != checksum:
         return False
-    
-    # Data urodzenia (PESEL pierwsze 6 cyfr to data)
-    birth_date_str = pesel[:6]
+
+    # Birthdate verification
+    birthdate_str = pesel[:6]  # YYMMDD
     try:
-        birth_date = datetime.strptime(birth_date_str, "%y%m%d")
+        birthdate = datetime.strptime(birthdate_str, "%y%m%d")
+        current_year = datetime.now().year
+        if birthdate.year > current_year:
+            return False
     except ValueError:
         return False
-    
-    # Płeć (10. cyfra PESEL)
-    gender_digit = int(pesel[9])
-    gender = 'M' if gender_digit % 2 != 0 else 'F'
 
-    return gender
+    # Gender matching with PESEL
+    gender_digit = int(pesel[9])
+    if gender_digit % 2 == 0:
+        gender = 'F'
+    else:
+        gender = 'M'
+    return True
